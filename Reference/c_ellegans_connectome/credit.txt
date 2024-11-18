@@ -1,0 +1,6 @@
+http://www.connectomeengine.com/ - source
+
+
+https://github.com/openworm/openworm_docs/blob/master/docs/Resources/resources.md
+
+https://www.wormatlas.org/neuronalwiring.html
