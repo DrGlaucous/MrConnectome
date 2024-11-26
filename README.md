@@ -1,4 +1,6 @@
 # MrConnectome
+An API to access a crude recreation of the *c. ellegans* connectome for mid-level programs.
+
 
 *Note: I am an engineer, not a neuroscientist, so this stuff is probably horribly wrong.
 Either way, I will go at it with oblivious vigor.*
@@ -11,6 +13,8 @@ Currently, the simulated connectome runs on python.
 There is an integer dictionary *(hash map)* with an entry for each neuron, and output point, containing the neuron's total accumulated weight from that cycle.
 
 There is a single "threshold" shared by all neurons, and when a neuron's entry in the hash map is exceeded, the neuron fires and runs a corresponding function that then either stimulates or inhibits other neurons with various weighting. After this function is ran, it resets that neuron's stimulation factor to 0.
+
+*I now realize that charges will accumulate on the neuron until it fires and resets, and it does not require a simultaneous multi-fire from other neurons to trigger it.*
 
 
 There are several "Stimulation Points" in the main function that forcibly fire a selected group of neurons to set a behavior in the larger connectome.
@@ -61,7 +65,7 @@ I'll use a hash map to store each neuron weight like before, but also, I'll stor
 I want to make it so we can read in new neuron connections and weights from a csv file, instead of a long, long list of hard-coded functions (as is currently done).
 
 ```
-//something kind of like this...
+//something kind of like this... (psuedo-cpp)
 class Neuron {
 
     public:
@@ -125,13 +129,31 @@ class Neuron {
 }
 ```
 
+## CSV format:
+
+| Neuron | Persistence | Threshold | Output 1 | Weight 1 | Output 2 | Weight 2 | ... |
+| - | - | - | - | - | - | - | - |
+| ADAL | 10 | 30 | ADAR | 1 | AIBR | 2 |
+| MDL04 | -1 | 3000 |
+
+- `Neuron` - Name of the neuron this entry will affect
+- `Persistence` - How many `tick()` cycles can happen between weight adjustments before the neuron's weight will be reset. Values less than 0 are not reset.
+- `Threshold` - The value that the neuron's weight must exceed before it will fire.
+- `Output X` - Name of a neuron that `Neuron` will stimulate when it fires
+- `Weight X` - The value that the other neuron's weight will be changed by when stimulated by this one
+
+### Notes
+- There can be as many `output` + `weight` pairs as desired, new pairs can simply be added at the end of the line. A neuron with no outputs (for instance, `MDL04`) are typically used as an interface to outside variables. In the example used here, `MDL04` isn't a real neuron in the connectome, but represents what would be a muscle in the real organism. Because this has no outputs, the threshold value doesn't have as much importance here, so long as its set to something reasonably large so that the weight isn't reset before it gets a chance to be read.
+
 
 ## Resources + credits
 
-Original source:
-- http://www.connectomeengine.com/ - source
+Original connectome author: Timothy Busbice, (c) 2014
 
-Further Reading:
+Original source:
+- http://www.connectomeengine.com/
+
+Other useful articles and repos:
 - https://github.com/openworm/openworm_docs/blob/master/docs/Resources/resources.md
 - https://www.wormatlas.org/neuronalwiring.html
 
