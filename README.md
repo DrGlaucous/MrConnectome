@@ -1,10 +1,53 @@
+![Logo](./Resources/Logo.png)
+
 # MrConnectome
+
 An API to access a crude recreation of the *c. Elegans* connectome for mid-level programs.
 
 
 *Note: I am an engineer, not a neuroscientist, so this stuff is probably horribly wrong.
 Either way, I will go at it with oblivious vigor.*
 
+## Demo
+I stuck this in Cave Story to see if it worked. Long story short, it did:
+https://github.com/DrGlaucous/CaveS-Public/tree/main/Connectome
+
+Also, this is where I actually have the library, currently written in Rust. I need to bring it over here sometime.
+
+## CSV format:
+
+| Neuron | Persistence | Threshold | Output 1 | Weight 1 | Output 2 | Weight 2 | ... |
+| - | - | - | - | - | - | - | - |
+| ADAL | 10 | 30 | ADAR | 1 | AIBR | 2 |
+| MDL04 | -1 | 3000 |
+
+- `Neuron` - Name of the neuron this entry will affect
+- `Persistence` - How many `tick()` cycles can happen between weight adjustments before the neuron's weight will be reset. Values less than 0 are not reset.
+- `Threshold` - The value that the neuron's weight must exceed before it will fire.
+- `Output X` - Name of a neuron that `Neuron` will stimulate when it fires
+- `Weight X` - The value that the other neuron's weight will be changed by when stimulated by this one
+
+### Notes
+- There can be as many `output` + `weight` pairs as desired, new pairs can simply be added at the end of the line. A neuron with no outputs (for instance, `MDL04`) are typically used as an interface to outside variables. In the example used here, `MDL04` isn't a real neuron in the connectome, but represents what would be a muscle in the real organism. Because this has no outputs, the threshold value doesn't have as much importance here, so long as its set to something reasonably large so that the weight isn't reset before it gets a chance to be read.
+
+
+## Resources + credits
+
+Original connectome author: Timothy Busbice, (c) 2014
+
+Original source:
+- http://www.connectomeengine.com/
+
+Other useful articles and repos:
+- https://github.com/openworm/openworm_docs/blob/master/docs/Resources/resources.md
+- https://www.wormatlas.org/neuronalwiring.html
+
+
+
+## Notes for me
+<details>
+
+<summary>Notes</summary>
 
 
 ## Imported Theory of operation
@@ -129,35 +172,4 @@ class Neuron {
 }
 ```
 
-## CSV format:
-
-| Neuron | Persistence | Threshold | Output 1 | Weight 1 | Output 2 | Weight 2 | ... |
-| - | - | - | - | - | - | - | - |
-| ADAL | 10 | 30 | ADAR | 1 | AIBR | 2 |
-| MDL04 | -1 | 3000 |
-
-- `Neuron` - Name of the neuron this entry will affect
-- `Persistence` - How many `tick()` cycles can happen between weight adjustments before the neuron's weight will be reset. Values less than 0 are not reset.
-- `Threshold` - The value that the neuron's weight must exceed before it will fire.
-- `Output X` - Name of a neuron that `Neuron` will stimulate when it fires
-- `Weight X` - The value that the other neuron's weight will be changed by when stimulated by this one
-
-### Notes
-- There can be as many `output` + `weight` pairs as desired, new pairs can simply be added at the end of the line. A neuron with no outputs (for instance, `MDL04`) are typically used as an interface to outside variables. In the example used here, `MDL04` isn't a real neuron in the connectome, but represents what would be a muscle in the real organism. Because this has no outputs, the threshold value doesn't have as much importance here, so long as its set to something reasonably large so that the weight isn't reset before it gets a chance to be read.
-
-
-## Resources + credits
-
-Original connectome author: Timothy Busbice, (c) 2014
-
-Original source:
-- http://www.connectomeengine.com/
-
-Other useful articles and repos:
-- https://github.com/openworm/openworm_docs/blob/master/docs/Resources/resources.md
-- https://www.wormatlas.org/neuronalwiring.html
-
-
-
-
-
+</details>
