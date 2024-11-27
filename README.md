@@ -1,5 +1,5 @@
 # MrConnectome
-An API to access a crude recreation of the *c. ellegans* connectome for mid-level programs.
+An API to access a crude recreation of the *c. Elegans* connectome for mid-level programs.
 
 
 *Note: I am an engineer, not a neuroscientist, so this stuff is probably horribly wrong.
